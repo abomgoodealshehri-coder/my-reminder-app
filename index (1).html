@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="مذكّري">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi2YXYsNmD2ZHYsduMIiwic2hvcnRfbmFtZSI6Itio2LDZg9ix2YrZhiIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMWExYTJlIiwidGhlbWVfY29sb3IiOiIjMDBkNGZmIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBSUFBQUFDQUNBWUFBQUQ1MkgvNUFBQUFFRWxFUVZSNDJ1M2FRUTZEUVJTRTBiL3YzK0hFQUFBQUVsRlRrU3VRbUNDIiwic2l6ZXMiOiIxMjh4MTI4IiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
+    <title>مذكّري ⏰</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 15px;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 25px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #00d4ff;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .install-prompt {
+            background: linear-gradient(135deg, #5f27cd 0%, #4a1fa8 100%);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .install-prompt.show {
+            display: flex;
+        }
+
+        .install-prompt-text {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .install-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, #ff4757 0%, #cc3a47 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #5f27cd 0%, #4a1fa8 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(95, 39, 205, 0.4);
+        }
+
+        .add-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .add-form.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group input[type="time"] {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .status-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .status-label {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .status-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+
+        .permission-warning {
+            background: rgba(255, 193, 7, 0.15);
+            border: 2px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .permission-warning.show {
+            display: block;
+        }
+
+        .permission-warning-title {
+            font-weight: 700;
+            color: #ffc107;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .permission-warning-text {
+            font-size: 13px;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .reminders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .reminder-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .reminder-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff 0%, #5f27cd 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .reminder-card.active {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .reminder-card.active::before {
+            transform: scaleX(1);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+            }
+        }
+
+        .reminder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .reminder-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .delete-btn {
+            background: rgba(255, 71, 87, 0.2);
+            border: none;
+            color: #ff4757;
+            min-width: 35px;
+            min-height: 35px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 71, 87, 0.3);
+            transform: scale(1.1);
+        }
+
+        .delete-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 71, 87, 0.5);
+        }
+
+        .reminder-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .reminder-time {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            color: #aaa;
+        }
+
+        .time-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #00d4ff;
+        }
+
+        .countdown {
+            background: rgba(95, 39, 205, 0.3);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            border: 2px solid rgba(95, 39, 205, 0.5);
+        }
+
+        .countdown.soon {
+            background: rgba(255, 193, 7, 0.3);
+            border-color: rgba(255, 193, 7, 0.5);
+            color: #ffc107;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .alert-box {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
+            transform: translateY(-200%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+        }
+
+        .alert-box.show {
+            transform: translateY(0);
+        }
+
+        .alert-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .alert-message {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .alert-time {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #aaa;
+        }
+
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #aaa;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: #00d4ff;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 3px;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+            
+            .reminder-text {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">⏰</div>
+            <h1>مذكّري الذكي</h1>
+            <p class="subtitle">لا تنسى أي شيء مهم</p>
+        </div>
+
+        <div class="install-prompt" id="installPrompt">
+            <div style="font-size: 24px;">📲</div>
+            <div class="install-prompt-text">
+                <strong>نزّل التطبيق</strong><br>
+                اضغط هنا عشان يشتغل حتى لو قفلت الشاشة
+            </div>
+            <button class="install-btn" onclick="showInstallInstructions()">كيف؟</button>
+        </div>
+
+        <div class="permission-warning" id="permissionWarning">
+            <div class="permission-warning-title">⚠️ تنبيه مهم للجوال</div>
+            <div class="permission-warning-text">
+                • على <strong>الآيفون</strong>: اضغط زر "مشاركة" <span style="font-size: 16px;">⎋</span> ثم "إضافة إلى الشاشة الرئيسية"<br>
+                • على <strong>الأندرويد</strong>: اضغط القائمة ⋮ ثم "إضافة إلى الشاشة الرئيسية"<br>
+                <br>
+                <strong>🌍 مهم جداً:</strong> لازم تسمح بالوصول للموقع عشان تذكيرات GPS تشتغل!<br>
+                <strong>بعدين افتح التطبيق من الشاشة الرئيسية</strong> عشان تقدر تستقبل الإشعارات!
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-label">الحالة</div>
+                <div class="status-value" id="appStatus">متوقف</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">الوقت الآن</div>
+                <div class="status-value" id="currentTime">--:--</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">📍 GPS</div>
+                <div class="status-value" id="gpsStatus" style="font-size: 13px;">غير متاح</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-start" id="startBtn" onclick="toggleApp()">▶️ تشغيل</button>
+            <button class="btn btn-add" onclick="toggleForm()">➕ إضافة</button>
+        </div>
+
+        <div class="add-form" id="addForm">
+            <div class="form-group">
+                <label>🎯 نوع التذكير</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <button class="type-btn active" id="timeTypeBtn" onclick="selectType('time')" style="flex: 1; padding: 12px; border: 2px solid #00d4ff; background: rgba(0, 212, 255, 0.2); color: #00d4ff; border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif;">
+                        ⏰ حسب الوقت
+                    </button>
+                    <button class="type-btn" id="locationTypeBtn" onclick="selectType('location')" style="flex: 1; padding: 12px; border: 2px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.05); color: #aaa; border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif;">
+                        📍 حسب الموقع
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group" id="timeGroup">
+                <label>⏰ الوقت</label>
+                <input type="time" id="timeInput">
+            </div>
+
+            <div class="form-group" id="locationGroup" style="display: none;">
+                <label>📍 الإحداثيات</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                    <input type="number" step="any" id="latInput" placeholder="خط العرض (Latitude)" style="flex: 1;">
+                    <input type="number" step="any" id="lngInput" placeholder="خط الطول (Longitude)" style="flex: 1;">
+                </div>
+                <button onclick="getCurrentLocation()" style="width: 100%; padding: 10px; background: rgba(95, 39, 205, 0.3); border: 2px solid rgba(95, 39, 205, 0.5); color: #fff; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: 'Cairo', sans-serif; margin-bottom: 8px;">
+                    📍 استخدام موقعي الحالي
+                </button>
+                <div style="font-size: 12px; color: #aaa; line-height: 1.4;">
+                    💡 أو انسخ الإحداثيات من Google Maps
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>📝 نص التذكير</label>
+                <textarea id="textInput" placeholder="مثال: سبحان الله" required></textarea>
+                <button onclick="testSpeech()" style="width: 100%; padding: 10px; margin-top: 8px; background: rgba(255, 193, 7, 0.3); border: 2px solid rgba(255, 193, 7, 0.5); color: #ffc107; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: 'Cairo', sans-serif;">
+                    🔊 اختبر النطق
+                </button>
+            </div>
+
+            <div class="form-group" id="locationNameGroup" style="display: none;">
+                <label>🏷️ اسم المكان (اختياري)</label>
+                <input type="text" id="locationNameInput" placeholder="مثال: المسجد، البيت، العمل">
+            </div>
+
+            <button class="btn btn-start" style="width: 100%;" onclick="addReminder()">
+                ✅ حفظ التذكير
+            </button>
+        </div>
+
+        <div class="reminders-list" id="remindersList">
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <p>لا توجد تذكيرات بعد</p>
+                <p style="font-size: 13px; margin-top: 5px;">اضغط "➕ إضافة" للبدء</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-box" id="alertBox">
+        <div class="alert-title" id="alertTitle">🔔 تذكير</div>
+        <div class="alert-message" id="alertMessage">---</div>
+        <div class="alert-time" id="alertTime"></div>
+    </div>
+
+    <script>
+        let reminders = [
+            {
+                text: "سبحان الله",
+                time: "06:55",
+                type: "time",
+                activated: false
+            },
+            {
+                text: "الله أكبر",
+                time: "07:30",
+                type: "time",
+                activated: false
+            }
+        ];
+
+        let isRunning = false;
+        let checkInterval = null;
+        let timeInterval = null;
+        let countdownInterval = null;
+        let notificationPermission = false;
+        let currentUserLocation = null;
+        let locationWatchId = null;
+        let selectedType = 'time';
+
+        // اختيار نوع التذكير
+        function selectType(type) {
+            selectedType = type;
+            
+            const timeBtn = document.getElementById('timeTypeBtn');
+            const locationBtn = document.getElementById('locationTypeBtn');
+            const timeGroup = document.getElementById('timeGroup');
+            const locationGroup = document.getElementById('locationGroup');
+            const locationNameGroup = document.getElementById('locationNameGroup');
+            
+            if (type === 'time') {
+                timeBtn.style.background = 'rgba(0, 212, 255, 0.2)';
+                timeBtn.style.borderColor = '#00d4ff';
+                timeBtn.style.color = '#00d4ff';
+                
+                locationBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+                locationBtn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                locationBtn.style.color = '#aaa';
+                
+                timeGroup.style.display = 'block';
+                locationGroup.style.display = 'none';
+                locationNameGroup.style.display = 'none';
+            } else {
+                locationBtn.style.background = 'rgba(0, 212, 255, 0.2)';
+                locationBtn.style.borderColor = '#00d4ff';
+                locationBtn.style.color = '#00d4ff';
+                
+                timeBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+                timeBtn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                timeBtn.style.color = '#aaa';
+                
+                timeGroup.style.display = 'none';
+                locationGroup.style.display = 'block';
+                locationNameGroup.style.display = 'block';
+            }
+        }
+
+        // الحصول على الموقع الحالي
+        function getCurrentLocation() {
+            if (!navigator.geolocation) {
+                alert('⚠️ الموقع غير مدعوم في جهازك!');
+                return;
+            }
+
+            const btn = event.target;
+            btn.textContent = '⏳ جاري تحديد الموقع...';
+            btn.disabled = true;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    document.getElementById('latInput').value = position.coords.latitude.toFixed(6);
+                    document.getElementById('lngInput').value = position.coords.longitude.toFixed(6);
+                    btn.textContent = '✅ تم! استخدام موقعي الحالي';
+                    btn.disabled = false;
+                    
+                    setTimeout(() => {
+                        btn.textContent = '📍 استخدام موقعي الحالي';
+                    }, 2000);
+                },
+                (error) => {
+                    alert('⚠️ فشل تحديد الموقع! تأكد من السماح بالوصول للموقع.');
+                    btn.textContent = '📍 استخدام موقعي الحالي';
+                    btn.disabled = false;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        // حساب المسافة بين نقطتين (بالكيلومتر)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // نصف قطر الأرض بالكيلومتر
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // تتبع الموقع
+        function startLocationTracking() {
+            if (!navigator.geolocation) {
+                console.log('الموقع غير مدعوم');
+                document.getElementById('gpsStatus').textContent = '❌ غير مدعوم';
+                return;
+            }
+
+            document.getElementById('gpsStatus').textContent = '⏳ جاري...';
+
+            locationWatchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    currentUserLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    
+                    const accuracy = position.coords.accuracy.toFixed(0);
+                    document.getElementById('gpsStatus').textContent = `✓ دقة ${accuracy}م`;
+                    document.getElementById('gpsStatus').style.color = '#4ecca3';
+                    
+                    console.log('📍 الموقع الحالي:', currentUserLocation.lat.toFixed(6), currentUserLocation.lng.toFixed(6));
+                    console.log('🎯 دقة الموقع:', accuracy, 'متر');
+                },
+                (error) => {
+                    console.log('خطأ في تتبع الموقع:', error.message);
+                    
+                    if (error.code === 1) {
+                        document.getElementById('gpsStatus').textContent = '❌ مرفوض';
+                        console.log('❌ تم رفض الوصول للموقع');
+                    } else if (error.code === 2) {
+                        document.getElementById('gpsStatus').textContent = '⚠️ غير متاح';
+                        console.log('⚠️ الموقع غير متاح');
+                    } else if (error.code === 3) {
+                        document.getElementById('gpsStatus').textContent = '⏰ انتهت المهلة';
+                        console.log('⏰ انتهت مهلة الحصول على الموقع');
+                    }
+                    
+                    document.getElementById('gpsStatus').style.color = '#ff4757';
+                },
+                {
+                    enableHighAccuracy: true,  // دقة عالية
+                    maximumAge: 5000,          // تحديث كل 5 ثواني
+                    timeout: 10000             // مهلة 10 ثواني
+                }
+            );
+        }
+
+        // إيقاف تتبع الموقع
+        function stopLocationTracking() {
+            if (locationWatchId) {
+                navigator.geolocation.clearWatch(locationWatchId);
+                locationWatchId = null;
+            }
+        }
+
+        // طلب إذن الإشعارات
+        async function requestNotificationPermission() {
+            if ('Notification' in window) {
+                try {
+                    const permission = await Notification.requestPermission();
+                    notificationPermission = permission === 'granted';
+                    
+                    if (notificationPermission) {
+                        document.getElementById('permissionWarning').classList.remove('show');
+                    } else {
+                        document.getElementById('permissionWarning').classList.add('show');
+                    }
+                    
+                    return notificationPermission;
+                } catch (e) {
+                    console.log('إشعارات غير مدعومة:', e);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        // إرسال إشعار للنظام
+        function sendSystemNotification(title, message) {
+            if (notificationPermission && 'Notification' in window) {
+                try {
+                    const notification = new Notification(title, {
+                        body: message,
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">⏰</text></svg>',
+                        badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">⏰</text></svg>',
+                        vibrate: [300, 100, 300],
+                        requireInteraction: true,
+                        tag: 'reminder-' + Date.now()
+                    });
+
+                    notification.onclick = () => {
+                        window.focus();
+                        notification.close();
+                    };
+                } catch (e) {
+                    console.log('خطأ في الإشعار:', e);
+                }
+            }
+        }
+
+        // تحديث الوقت الحالي
+        function updateCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
+        }
+
+        // حساب الوقت المتبقي
+        function getTimeRemaining(targetTime) {
+            const now = new Date();
+            const [hours, minutes] = targetTime.split(':');
+            
+            const target = new Date();
+            target.setHours(parseInt(hours));
+            target.setMinutes(parseInt(minutes));
+            target.setSeconds(0);
+
+            if (target < now) {
+                target.setDate(target.getDate() + 1);
+            }
+
+            const diff = target - now;
+            
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            return { hours: h, minutes: m, seconds: s, total: diff };
+        }
+
+        // تحديث العدادات
+        function updateCountdowns() {
+            reminders.forEach((reminder, index) => {
+                if (reminder.activated) return;
+
+                const countdownEl = document.querySelector(`[data-index="${index}"] .countdown`);
+                if (!countdownEl) return;
+
+                // للتذكيرات المبنية على الوقت
+                if (reminder.type === 'time') {
+                    const remaining = getTimeRemaining(reminder.time);
+                    const h = remaining.hours;
+                    const m = remaining.minutes;
+                    const s = remaining.seconds;
+
+                    let text = '';
+                    if (h > 0) {
+                        text = `${h}س ${m}د`;
+                    } else if (m > 0) {
+                        text = `${m}د ${s}ث`;
+                    } else {
+                        text = `${s}ث`;
+                    }
+
+                    countdownEl.textContent = `⏳ باقي ${text}`;
+
+                    if (h === 0 && m < 5) {
+                        countdownEl.classList.add('soon');
+                    } else {
+                        countdownEl.classList.remove('soon');
+                    }
+                }
+
+                // للتذكيرات المبنية على الموقع
+                if (reminder.type === 'location' && currentUserLocation && reminder.coords) {
+                    const distance = calculateDistance(
+                        currentUserLocation.lat,
+                        currentUserLocation.lng,
+                        reminder.coords.lat,
+                        reminder.coords.lng
+                    );
+
+                    const distKm = distance.toFixed(2);
+                    const distM = (distance * 1000).toFixed(0);
+
+                    if (distance < 1) {
+                        countdownEl.textContent = `📍 ${distM} متر`;
+                    } else {
+                        countdownEl.textContent = `📍 ${distKm} كم`;
+                    }
+
+                    // لون أصفر إذا أقل من 100 متر
+                    if (distance < 0.1) {
+                        countdownEl.classList.add('soon');
+                    } else {
+                        countdownEl.classList.remove('soon');
+                    }
+                }
+            });
+        }
+
+        // عرض التنبيه
+        function showAlert(title, message) {
+            const alertBox = document.getElementById('alertBox');
+            const alertTitle = document.getElementById('alertTitle');
+            const alertMessage = document.getElementById('alertMessage');
+            const alertTime = document.getElementById('alertTime');
+            
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+            
+            alertTitle.textContent = title;
+            alertMessage.textContent = message;
+            alertTime.textContent = `⏰ ${timeStr}`;
+            
+            alertBox.classList.add('show');
+            
+            // إرسال إشعار للنظام
+            sendSystemNotification(title, message);
+            
+            if (navigator.vibrate) {
+                navigator.vibrate([300, 100, 300, 100, 300]);
+            }
+            
+            // تشغيل الصوت أولاً
+            playSound();
+            
+            // نطق النص بعد ثانية من الصوت
+            setTimeout(() => {
+                speakText(message);
+            }, 800);
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 6000);
+        }
+
+        // صوت التنبيه
+        function playSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+                
+                setTimeout(() => {
+                    const osc2 = audioContext.createOscillator();
+                    const gain2 = audioContext.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioContext.destination);
+                    osc2.frequency.value = 1000;
+                    osc2.type = 'sine';
+                    gain2.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    osc2.start(audioContext.currentTime);
+                    osc2.stop(audioContext.currentTime + 0.5);
+                }, 200);
+            } catch (e) {
+                console.log('صوت غير مدعوم');
+            }
+        }
+
+        // نطق النص بالعربي
+        function speakText(text) {
+            try {
+                // إيقاف أي نطق سابق
+                window.speechSynthesis.cancel();
+
+                // إنشاء نطق جديد
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // إعدادات الصوت العربي
+                utterance.lang = 'ar-SA'; // اللغة العربية السعودية
+                utterance.rate = 0.9; // سرعة النطق (0.9 = أبطأ قليلاً لوضوح أكثر)
+                utterance.pitch = 1; // درجة الصوت
+                utterance.volume = 1; // مستوى الصوت (1 = الحد الأقصى)
+
+                // محاولة استخدام صوت عربي إذا كان متوفر
+                const voices = window.speechSynthesis.getVoices();
+                const arabicVoice = voices.find(voice => 
+                    voice.lang.startsWith('ar') || 
+                    voice.lang.includes('AR') ||
+                    voice.name.includes('Arabic') ||
+                    voice.name.includes('ar-')
+                );
+                
+                if (arabicVoice) {
+                    utterance.voice = arabicVoice;
+                    console.log('استخدام الصوت العربي:', arabicVoice.name);
+                } else {
+                    console.log('صوت عربي غير متوفر، استخدام الصوت الافتراضي');
+                }
+
+                // نطق النص
+                window.speechSynthesis.speak(utterance);
+
+                // للتأكد من تحميل الأصوات
+                utterance.onend = () => {
+                    console.log('انتهى النطق');
+                };
+
+                utterance.onerror = (e) => {
+                    console.log('خطأ في النطق:', e);
+                };
+
+            } catch (e) {
+                console.log('النطق غير مدعوم في هذا المتصفح:', e);
+            }
+        }
+
+        // اختبار النطق
+        function testSpeech() {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                alert('⚠️ يرجى كتابة نص أولاً!');
+                return;
+            }
+
+            // تحميل الأصوات أولاً (مهم للأجهزة المحمولة)
+            if (window.speechSynthesis.getVoices().length === 0) {
+                window.speechSynthesis.addEventListener('voiceschanged', () => {
+                    speakText(text);
+                }, { once: true });
+            } else {
+                speakText(text);
+            }
+        }
+
+        // فحص التذكيرات
+        function checkReminders() {
+            const now = new Date();
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + 
+                              now.getMinutes().toString().padStart(2, '0');
+
+            reminders.forEach((reminder) => {
+                if (reminder.activated) return;
+
+                // فحص التذكيرات المبنية على الوقت
+                if (reminder.type === 'time' && currentTime === reminder.time) {
+                    showAlert("🔔 تذكير!", reminder.text);
+                    reminder.activated = true;
+                    saveReminders();
+                    updateUI();
+                }
+
+                // فحص التذكيرات المبنية على الموقع
+                if (reminder.type === 'location' && currentUserLocation && reminder.coords) {
+                    const distance = calculateDistance(
+                        currentUserLocation.lat,
+                        currentUserLocation.lng,
+                        reminder.coords.lat,
+                        reminder.coords.lng
+                    );
+
+                    // إذا كانت المسافة أقل من 80 متر (0.08 كيلومتر)
+                    console.log(`المسافة من ${reminder.locationName || 'الموقع'}: ${(distance * 1000).toFixed(0)} متر`);
+                    
+                    if (distance < 0.08) { // 80 متر
+                        const locationName = reminder.locationName || 'الموقع المحدد';
+                        showAlert(`📍 وصلت إلى ${locationName}`, reminder.text);
+                        reminder.activated = true;
+                        saveReminders();
+                        updateUI();
+                    }
+                }
+            });
+        }
+
+        // تحديث الواجهة
+        function updateUI() {
+            const list = document.getElementById('remindersList');
+            const count = document.getElementById('reminderCount');
+            
+            count.textContent = reminders.length;
+
+            if (reminders.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>لا توجد تذكيرات بعد</p>
+                        <p style="font-size: 13px; margin-top: 5px;">اضغط "➕ إضافة" للبدء</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = reminders.map((r, i) => {
+                let countdownText = '';
+                let displayInfo = '';
+                let soonClass = '';
+
+                if (r.activated) {
+                    countdownText = '✅ تم';
+                } else if (r.type === 'time') {
+                    const remaining = getTimeRemaining(r.time);
+                    const h = remaining.hours;
+                    const m = remaining.minutes;
+                    const s = remaining.seconds;
+
+                    displayInfo = `⏰ <span class="time-value">${r.time}</span>`;
+
+                    if (h > 0) {
+                        countdownText = `⏳ باقي ${h}س ${m}د`;
+                    } else if (m > 0) {
+                        countdownText = `⏳ باقي ${m}د ${s}ث`;
+                    } else {
+                        countdownText = `⏳ باقي ${s}ث`;
+                    }
+
+                    soonClass = (h === 0 && m < 5) ? 'soon' : '';
+                } else if (r.type === 'location') {
+                    const locationName = r.locationName || 'موقع محدد';
+                    displayInfo = `📍 <span class="time-value">${locationName}</span>`;
+
+                    if (currentUserLocation && r.coords) {
+                        const distance = calculateDistance(
+                            currentUserLocation.lat,
+                            currentUserLocation.lng,
+                            r.coords.lat,
+                            r.coords.lng
+                        );
+
+                        const distKm = distance.toFixed(2);
+                        const distM = (distance * 1000).toFixed(0);
+
+                        if (distance < 1) {
+                            countdownText = `📍 ${distM} متر`;
+                        } else {
+                            countdownText = `📍 ${distKm} كم`;
+                        }
+
+                        soonClass = (distance < 0.5) ? 'soon' : '';
+                    } else {
+                        countdownText = '📍 في انتظار الموقع...';
+                    }
+                }
+
+                return `
+                    <div class="reminder-card ${r.activated ? 'active' : ''}" data-index="${i}">
+                        <div class="reminder-header">
+                            <div class="reminder-text">${r.text}</div>
+                            <button class="delete-btn" onclick="deleteReminder(${i})">×</button>
+                        </div>
+                        <div class="reminder-info">
+                            <div class="reminder-time">
+                                ${displayInfo}
+                            </div>
+                            <div class="countdown ${soonClass}">${countdownText}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // إضافة تذكير
+        function addReminder() {
+            const text = document.getElementById('textInput').value.trim();
+
+            if (!text) {
+                alert('⚠️ يرجى كتابة نص التذكير!');
+                return;
+            }
+
+            const newReminder = {
+                text: text,
+                type: selectedType,
+                activated: false
+            };
+
+            if (selectedType === 'time') {
+                const time = document.getElementById('timeInput').value;
+                if (!time) {
+                    alert('⚠️ يرجى اختيار الوقت!');
+                    return;
+                }
+                newReminder.time = time;
+            } else {
+                const lat = parseFloat(document.getElementById('latInput').value);
+                const lng = parseFloat(document.getElementById('lngInput').value);
+                
+                if (isNaN(lat) || isNaN(lng)) {
+                    alert('⚠️ يرجى إدخال إحداثيات صحيحة!');
+                    return;
+                }
+
+                newReminder.coords = { lat, lng };
+                newReminder.locationName = document.getElementById('locationNameInput').value.trim() || 'موقع محدد';
+            }
+
+            reminders.push(newReminder);
+
+            // مسح النموذج
+            document.getElementById('timeInput').value = '';
+            document.getElementById('textInput').value = '';
+            document.getElementById('latInput').value = '';
+            document.getElementById('lngInput').value = '';
+            document.getElementById('locationNameInput').value = '';
+            document.getElementById('addForm').classList.remove('show');
+
+            saveReminders();
+            updateUI();
+            
+            showAlert("✅ تم الإضافة", text);
+        }
+
+        // حذف تذكير
+        function deleteReminder(index) {
+            console.log('محاولة حذف التذكير رقم:', index);
+            
+            // التحقق من صحة الفهرس
+            if (index < 0 || index >= reminders.length) {
+                console.error('فهرس خاطئ:', index);
+                return;
+            }
+            
+            // حذف مباشرة بدون confirm
+            const reminderText = reminders[index].text;
+            console.log('حذف التذكير:', reminderText);
+            
+            reminders.splice(index, 1);
+            saveReminders();
+            updateUI();
+            
+            // عرض رسالة تأكيد
+            showAlert("🗑️ تم الحذف", `تم حذف: ${reminderText}`);
+        }
+
+        // إظهار النموذج
+        function toggleForm() {
+            const form = document.getElementById('addForm');
+            form.classList.toggle('show');
+        }
+
+        // بدء التطبيق
+        async function startApp() {
+            // طلب إذن الإشعارات
+            await requestNotificationPermission();
+            
+            // تحميل أصوات النطق (مهم للجوال)
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+                window.speechSynthesis.addEventListener('voiceschanged', () => {
+                    console.log('تم تحميل أصوات النطق');
+                });
+            }
+            
+            // طلب إذن الموقع بشكل واضح
+            if (navigator.geolocation) {
+                try {
+                    // طلب الموقع مرة واحدة للحصول على الإذن
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            console.log('✅ تم الحصول على إذن الموقع');
+                            currentUserLocation = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+                            
+                            // بدء تتبع الموقع المستمر
+                            startLocationTracking();
+                        },
+                        (error) => {
+                            console.log('❌ خطأ في الموقع:', error.message);
+                            alert('⚠️ يرجى السماح بالوصول للموقع في الإعدادات عشان تذكيرات GPS تشتغل!');
+                            
+                            // محاولة البدء على أي حال
+                            startLocationTracking();
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
+                        }
+                    );
+                } catch (e) {
+                    console.log('خطأ في طلب الموقع:', e);
+                    startLocationTracking();
+                }
+            } else {
+                console.log('⚠️ الموقع غير مدعوم في هذا المتصفح');
+            }
+            
+            checkInterval = setInterval(checkReminders, 5000); // كل 5 ثواني (أسرع)
+            timeInterval = setInterval(updateCurrentTime, 1000);
+            countdownInterval = setInterval(updateCountdowns, 1000);
+            
+            checkReminders();
+            updateCurrentTime();
+            updateCountdowns();
+
+            isRunning = true;
+            const btn = document.getElementById('startBtn');
+            btn.textContent = '⏸️ إيقاف';
+            btn.className = 'btn btn-stop';
+            document.getElementById('appStatus').textContent = '▶️ يعمل';
+            
+            showAlert("✅ تم التشغيل", "التطبيق يعمل الآن!");
+        }
+
+        // إيقاف التطبيق
+        function stopApp() {
+            if (checkInterval) clearInterval(checkInterval);
+            if (timeInterval) clearInterval(timeInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            // إيقاف تتبع الموقع
+            stopLocationTracking();
+
+            isRunning = false;
+            const btn = document.getElementById('startBtn');
+            btn.textContent = '▶️ تشغيل';
+            btn.className = 'btn btn-start';
+            document.getElementById('appStatus').textContent = 'متوقف';
+        }
+
+        // تبديل الحالة
+        function toggleApp() {
+            if (isRunning) {
+                stopApp();
+            } else {
+                startApp();
+            }
+        }
+
+        // حفظ واسترجاع
+        function saveReminders() {
+            localStorage.setItem('reminders', JSON.stringify(reminders));
+        }
+
+        function loadReminders() {
+            const saved = localStorage.getItem('reminders');
+            if (saved) {
+                reminders = JSON.parse(saved);
+            }
+        }
+
+        // عرض تعليمات التنزيل
+        function showInstallInstructions() {
+            document.getElementById('permissionWarning').classList.add('show');
+            document.getElementById('installPrompt').classList.remove('show');
+        }
+
+        // التحقق من PWA
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            // التطبيق مفتوح من الشاشة الرئيسية
+            console.log('التطبيق يعمل كـ PWA');
+        } else {
+            // عرض رسالة التنزيل
+            setTimeout(() => {
+                document.getElementById('installPrompt').classList.add('show');
+            }, 2000);
+        }
+
+        // منع النوم
+        let wakeLock = null;
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (e) {
+                console.log('Wake Lock غير مدعوم');
+            }
+        }
+
+        // عند الرجوع للصفحة
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && wakeLock !== null && isRunning) {
+                requestWakeLock();
+            }
+        });
+
+        // تحميل عند البدء
+        loadReminders();
+        updateUI();
+        updateCurrentTime();
+        requestWakeLock();
+    </script>
+</body>
+</html>
