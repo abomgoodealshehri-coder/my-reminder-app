@@ -6,78 +6,99 @@
     <title>مذكّري الذكي ⏰</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* التنسيقات العامة (نفس ستايلك الجميل) */
+        /* التنسيقات الأصلية الكاملة */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #eee; min-height: 100vh; padding: 15px; padding-bottom: 80px; }
         .container { max-width: 600px; margin: 0 auto; }
-        .header { text-align: center; padding: 25px 0; background: rgba(255, 255, 255, 0.05); border-radius: 20px; margin-bottom: 20px; backdrop-filter: blur(10px); }
-        h1 { font-size: 28px; color: #00d4ff; font-weight: 800; }
-        .status-bar { background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; }
-        .status-value { color: #00d4ff; font-weight: 700; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Cairo'; margin-bottom: 10px; }
-        .btn-start { background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%); color: #fff; }
-        .add-form { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; margin-bottom: 20px; display: none; }
-        .add-form.show { display: block; }
+        .header { text-align: center; padding: 25px 0; background: rgba(255, 255, 255, 0.05); border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        h1 { font-size: 28px; color: #00d4ff; font-weight: 800; margin-bottom: 5px; text-shadow: 0 0 15px rgba(0, 212, 255, 0.3); }
+        .status-bar { background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .status-value { font-size: 16px; font-weight: 700; color: #00d4ff; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif; transition: 0.2s; }
+        .btn-start { background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%); color: #fff; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4); }
+        .btn-add { background: linear-gradient(135deg, #5f27cd 0%, #4a1fa8 100%); color: #fff; margin-right: 10px; }
+        .add-form { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.1); display: none; }
+        .add-form.show { display: block; animation: slideDown 0.3s ease; }
         .form-group { margin-bottom: 15px; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .reminder-card { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 18px; margin-bottom: 10px; border-right: 5px solid #00d4ff; }
-        .alert-box { position: fixed; top: 20px; left: 20px; right: 20px; background: #0099cc; padding: 25px; border-radius: 20px; transform: translateY(-200%); transition: 0.5s; z-index: 1000; text-align: center; }
+        .form-group label { display: block; margin-bottom: 8px; color: #aaa; font-size: 13px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; background: rgba(255, 255, 255, 0.05); color: #fff; font-family: 'Cairo'; font-size: 15px; }
+        .reminder-card { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 18px; border: 2px solid rgba(255, 255, 255, 0.1); margin-bottom: 12px; position: relative; overflow: hidden; transition: 0.3s; }
+        .card-active { border-color: #00d4ff; background: rgba(0, 212, 255, 0.05); }
+        .countdown { font-size: 12px; color: #00d4ff; background: rgba(0, 212, 255, 0.1); padding: 4px 10px; border-radius: 20px; margin-top: 8px; display: inline-block; font-weight: 600; }
+        .alert-box { position: fixed; top: 20px; left: 20px; right: 20px; background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%); padding: 25px; border-radius: 20px; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7); transform: translateY(-200%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; text-align: center; }
         .alert-box.show { transform: translateY(0); }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div style="font-size: 50px;">⏰</div>
+            <div style="font-size: 50px; margin-bottom: 10px;">⏰</div>
             <h1>مذكّري السعودي</h1>
-            <p style="color: #aaa;">بصوت عبدالله سعدون 🇸🇦</p>
+            <p style="color: #aaa; font-size: 14px;">بصوت عبدالله سعدون 🇸🇦</p>
         </div>
 
         <div class="status-bar">
-            <div class="status-item">الحالة: <span id="appStatus" class="status-value">متوقف</span></div>
-            <div class="status-item">الوقت: <span id="currentTime" class="status-value">--:--</span></div>
+            <div class="status-item"><div style="font-size: 11px; color: #aaa;">حالة التطبيق</div><div class="status-value" id="appStatus">متوقف</div></div>
+            <div class="status-item"><div style="font-size: 11px; color: #aaa;">الوقت الآن</div><div class="status-value" id="currentTime">--:--</div></div>
         </div>
 
-        <button class="btn btn-start" id="startBtn" onclick="toggleApp()">▶️ تشغيل المنبه</button>
-        <button class="btn" style="background: #5f27cd; color: white;" onclick="toggleForm()">➕ إضافة تذكير جديد</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="btn btn-start" id="startBtn" onclick="toggleApp()">▶️ تشغيل النظام</button>
+            <button class="btn btn-add" onclick="toggleForm()">➕ إضافة تنبيه</button>
+        </div>
 
         <div class="add-form" id="addForm">
-            <div class="form-group">
-                <label>⏰ اختر الوقت</label>
-                <input type="time" id="timeInput">
+            <div class="form-group"><label>نوع التذكير</label>
+                <select id="remType" onchange="toggleInputs()">
+                    <option value="time">وقت محدد ⏰</option>
+                    <option value="location">موقع جغرافي 📍</option>
+                </select>
             </div>
-            <div class="form-group">
-                <label>📝 وش نذكرك فيه؟</label>
-                <textarea id="textInput" placeholder="مثال: يا أبو مجودي لا تنسى الصلاة"></textarea>
-            </div>
-            <button class="btn btn-start" onclick="addReminder()">✅ حفظ</button>
+            <div id="timeInputGroup" class="form-group"><label>حدد الوقت</label><input type="time" id="timeInput"></div>
+            <div id="locInputGroup" class="form-group" style="display:none;"><label>اسم الموقع (مثال: العمل)</label><input type="text" id="locInput" placeholder="سيتم استخدام موقعك الحالي"></div>
+            <div class="form-group"><label>نص الرسالة الصوتية</label><textarea id="textInput" rows="2" placeholder="ماذا تريد أن تسمع؟"></textarea></div>
+            <button class="btn btn-start" style="width: 100%;" onclick="addReminder()">✅ حفظ التذكير</button>
         </div>
 
         <div id="remindersList"></div>
     </div>
 
     <div class="alert-box" id="alertBox">
-        <h2 id="alertMessage">تنبيه!</h2>
-        <p>حان الآن موعد التذكير</p>
+        <div style="font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.8);">🔔 حان وقت:</div>
+        <div id="alertMessage" style="font-size: 24px; font-weight: 800; color: #fff; margin: 10px 0;">---</div>
+        <button onclick="closeAlert()" style="background:#fff; color:#0099cc; border:none; padding:8px 20px; border-radius:10px; font-weight:700; cursor:pointer;">تم</button>
     </div>
 
     <script>
-        // --- الإعدادات الخاصة بك (تم التحديث بناءً على صورك) ---
-        const EL_API_KEY = "sk_01bf98d8e210b771de3a42811748ba942b88ae3516ddd231"; //
-        const ABDULLAH_VOICE_ID = "f9akNmCDHz23DCFXOYmn"; //
-        
+        // مفاتيحك الخاصة (مستخرجة من صورك)
+        const EL_API_KEY = "sk_01bf98d8e210b771de3a42811748ba942b88ae3516ddd231";
+        const ABDULLAH_VOICE_ID = "f9akNmCDHz23DCFXOYmn";
+
         let reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
         let isRunning = false;
         let timer = null;
 
         function toggleForm() { document.getElementById('addForm').classList.toggle('show'); }
+        function toggleInputs() {
+            const type = document.getElementById('remType').value;
+            document.getElementById('timeInputGroup').style.display = type === 'time' ? 'block' : 'none';
+            document.getElementById('locInputGroup').style.display = type === 'location' ? 'block' : 'none';
+        }
 
         function addReminder() {
-            const time = document.getElementById('timeInput').value;
-            const text = document.getElementById('textInput').value;
-            if(!time || !text) return alert("عبّ البيانات يا غالي");
+            const type = document.getElementById('remType').value;
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) return alert("اكتب النص");
+
+            let data = { type, text, activated: false, id: Date.now() };
+            if (type === 'time') data.time = document.getElementById('timeInput').value;
+            else {
+                // محاكاة إحداثيات (يمكن تطويرها لـ GPS فعلي)
+                data.location = document.getElementById('locInput').value || "موقع محدد";
+            }
             
-            reminders.push({ time, text, activated: false });
+            reminders.push(data);
             localStorage.setItem('reminders', JSON.stringify(reminders));
             updateUI();
             toggleForm();
@@ -91,74 +112,88 @@
                     body: JSON.stringify({
                         text: text,
                         model_id: "eleven_multilingual_v2",
-                        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+                        voice_settings: { stability: 0.5, similarity_boost: 0.8 }
                     })
                 });
                 const blob = await response.blob();
                 const audio = new Audio(URL.createObjectURL(blob));
                 audio.play();
-            } catch (e) { console.error("خطأ في الصوت", e); }
-        }
-
-        function checkReminders() {
-            const now = new Date();
-            const nowStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-            
-            reminders.forEach(r => {
-                if (r.time === nowStr && !r.activated) {
-                    r.activated = true;
-                    showNotification(r.text);
-                    speak(r.text);
-                    updateUI();
-                }
-            });
-        }
-
-        function showNotification(msg) {
-            const box = document.getElementById('alertBox');
-            document.getElementById('alertMessage').textContent = msg;
-            box.classList.add('show');
-            setTimeout(() => box.classList.remove('show'), 10000);
+            } catch (e) { console.error("TTS Error", e); }
         }
 
         function updateUI() {
             const list = document.getElementById('remindersList');
-            list.innerHTML = reminders.map((r, i) => `
-                <div class="reminder-card">
-                    <strong>${r.time}</strong> - ${r.text} ${r.activated ? '✅' : '⏳'}
-                    <button onclick="deleteRem(${i})" style="float:left; background:none; border:none; color:red; cursor:pointer;">حذف</button>
-                </div>
-            `).join('');
+            const now = new Date();
+            const currentT = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            
+            list.innerHTML = reminders.map((r, i) => {
+                let countdownTxt = "";
+                if (r.type === 'time' && !r.activated) {
+                    const [h, m] = r.time.split(':');
+                    let target = new Date(); target.setHours(h, m, 0);
+                    if (target < now) target.setDate(target.getDate() + 1);
+                    let diff = Math.floor((target - now) / 60000);
+                    countdownTxt = `باقي ${Math.floor(diff/60)} ساعة و ${diff%60} دقيقة`;
+                }
+
+                return `
+                <div class="reminder-card ${r.activated ? 'card-active' : ''}">
+                    <div style="font-size: 18px; font-weight: 700;">${r.text}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                        <span style="color: #aaa; font-size: 13px;">${r.type === 'time' ? '⏰ '+r.time : '📍 '+r.location}</span>
+                        <span style="color: #ff4757; font-size: 13px; cursor: pointer;" onclick="deleteRem(${i})">حذف</span>
+                    </div>
+                    ${countdownTxt ? `<div class="countdown">${countdownTxt}</div>` : ''}
+                </div>`;
+            }).join('');
+            document.getElementById('currentTime').textContent = currentT;
         }
 
-        function deleteRem(i) {
-            reminders.splice(i, 1);
-            localStorage.setItem('reminders', JSON.stringify(reminders));
+        function checkSystem() {
+            const now = new Date();
+            const currentT = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            
+            reminders.forEach(r => {
+                if (r.type === 'time' && r.time === currentT && !r.activated) {
+                    r.activated = true;
+                    triggerAlert(r.text);
+                }
+            });
             updateUI();
         }
+
+        function triggerAlert(text) {
+            document.getElementById('alertMessage').textContent = text;
+            document.getElementById('alertBox').classList.add('show');
+            speak(text);
+        }
+
+        function closeAlert() { document.getElementById('alertBox').classList.remove('show'); }
 
         function toggleApp() {
             isRunning = !isRunning;
             const btn = document.getElementById('startBtn');
-            if(isRunning) {
-                timer = setInterval(() => { checkReminders(); updateTime(); }, 1000);
-                btn.textContent = "⏸️ إيقاف المنبه";
-                btn.style.background = "red";
+            if (isRunning) {
+                timer = setInterval(checkSystem, 1000);
+                btn.textContent = "⏸️ إيقاف النظام";
+                btn.style.background = "linear-gradient(135deg, #ff4757 0%, #cc3a47 100%)";
                 document.getElementById('appStatus').textContent = "يعمل الآن";
-                speak("تم تشغيل المذكر بنجاح");
+                speak("تم تفعيل نظام التنبيه الذكي");
             } else {
                 clearInterval(timer);
-                btn.textContent = "▶️ تشغيل المنبه";
-                btn.style.background = "#00d4ff";
+                btn.textContent = "▶️ تشغيل النظام";
+                btn.style.background = "linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)";
                 document.getElementById('appStatus').textContent = "متوقف";
             }
         }
 
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('currentTime').textContent = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-        }
-
+        function deleteRem(i) { reminders.splice(i, 1); localStorage.setItem('reminders', JSON.stringify(reminders)); updateUI(); }
+        
+        // تحديث الساعة والواجهة فورياً
+        setInterval(() => {
+            const n = new Date();
+            document.getElementById('currentTime').textContent = n.getHours().toString().padStart(2, '0') + ":" + n.getMinutes().toString().padStart(2, '0');
+        }, 1000);
         updateUI();
     </script>
 </body>
